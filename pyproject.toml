@@ -1,0 +1,15 @@
+[project]
+name = "route-optimization"
+version = "0.1.0"
+description = "Mining routes optimization for the Quantum Quipu hackaton"
+readme = "README.md"
+authors = [
+    { name = "Kaue Miziara", email = "kauemiziara@gmail.com" },
+    { name = "Julia Santos", email = "juliasantos7652@gmail.com" },
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[build-system]
+requires = ["uv_build>=0.9.22,<0.10.0"]
+build-backend = "uv_build"
