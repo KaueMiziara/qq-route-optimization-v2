@@ -5,7 +5,7 @@ from scipy.spatial import distance_matrix
 
 def create_mining_graph(
     n_nodes: int, n_blocks: int = 1
-) -> tuple[nx.Graph, np.ndarray[tuple[int, int]], dict[int, float]]:
+) -> tuple[nx.Graph, np.ndarray, dict[int, np.ndarray]]:
     coords = np.random.rand(n_nodes, 2) * 100
     pos = {i: coords[i] for i in range(n_nodes)}
 

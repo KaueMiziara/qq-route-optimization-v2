@@ -1,6 +1,7 @@
 import numpy as np
 
 from route_optimization.graph import create_mining_graph
+from route_optimization.visualization.graph import plot_graph
 
 if __name__ == "__main__":
     np.random.seed(10)
@@ -12,3 +13,5 @@ if __name__ == "__main__":
     print(f"Distance example (node 0 to node 1): {dist_matrix[0][1]:.2f}")
     print("\nDistance matrix:")
     print(dist_matrix)
+
+    plot_graph(G_mine, positions)
