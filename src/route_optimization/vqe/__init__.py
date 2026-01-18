@@ -9,6 +9,7 @@ from qiskit.primitives.containers.estimator_pub import EstimatorPub
 from qiskit.quantum_info import SparsePauliOp
 from scipy.optimize import OptimizeResult, minimize
 
+from route_optimization.logger import Logger
 from route_optimization.model.converter import bqm_to_qp, qp_to_ising
 
 
@@ -31,7 +32,10 @@ def _prepare_problem(
     return hamiltonian, ansatz, offset
 
 
-def run_vqe(bqm: BinaryQuadraticModel) -> tuple[OptimizeResult, QuantumCircuit, float]:
+def run_vqe(
+    bqm: BinaryQuadraticModel,
+    log: Logger,
+) -> tuple[OptimizeResult, QuantumCircuit, float, Logger]:
     hamilt, ansatz, offset = _prepare_problem(bqm)
     estimator = StatevectorEstimator()
 
@@ -59,6 +63,7 @@ def run_vqe(bqm: BinaryQuadraticModel) -> tuple[OptimizeResult, QuantumCircuit, 
         pub_result_data = cast(Any, result[0].data)
         energy = float(pub_result_data.evs[0])
 
+        log.register_energy(energy)
         return energy
 
     print("\nStarting VQE")
@@ -72,4 +77,4 @@ def run_vqe(bqm: BinaryQuadraticModel) -> tuple[OptimizeResult, QuantumCircuit, 
 
     final_energy = float(res.fun) + offset
 
-    return res, ansatz, final_energy
+    return res, ansatz, final_energy, log
