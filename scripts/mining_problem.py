@@ -7,6 +7,7 @@ from scipy.optimize import OptimizeResult
 from route_optimization.graph import create_mining_graph
 from route_optimization.logger import Logger
 from route_optimization.model.qubo import create_hamiltonian
+from route_optimization.visualization.convergence import plot_convergence
 from route_optimization.visualization.graph import plot_graph
 from route_optimization.vqe import run_vqe
 
@@ -61,3 +62,5 @@ if __name__ == "__main__":
     bqm = create_problem(dist_matrix, a_coef=0.0, b_coef=1.0)
 
     opt_result, opt_ansatz, final_energy, log = execute_vqe(bqm)
+
+    plot_convergence(log)
