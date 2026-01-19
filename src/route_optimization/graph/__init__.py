@@ -31,3 +31,23 @@ def create_mining_graph(
         G[u][v]["weight"] = dist_mat[u][v]
 
     return G, dist_mat, pos
+
+
+def decode_route(
+    bitstring: str,
+    n: int,
+    variables_idx: dict[str, int],
+) -> list[int]:
+    bits = bitstring[::-1]
+    route = [-1] * n
+
+    for var_name, idx in variables_idx.items():
+        if bits[idx] == "1":
+            parts = var_name.split("_")
+            site_i = int(parts[1])
+            time_t = int(parts[2])
+
+            if time_t < n:
+                route[time_t] = site_i
+
+    return route
