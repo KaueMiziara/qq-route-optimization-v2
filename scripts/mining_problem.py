@@ -1,10 +1,14 @@
 import dimod
 import networkx as nx
 import numpy as np
+from qiskit import QuantumCircuit
+from scipy.optimize import OptimizeResult
 
 from route_optimization.graph import create_mining_graph
+from route_optimization.logger import Logger
 from route_optimization.model.qubo import create_hamiltonian
 from route_optimization.visualization.graph import plot_graph
+from route_optimization.vqe import run_vqe
 
 
 def create_graph(
@@ -22,11 +26,11 @@ def create_graph(
     return G_mine, dist_matrix, positions
 
 
-def create_hamilt(
+def create_problem(
     dist_matrix: np.ndarray,
     a_coef: float,
     b_coef: float,
-) -> tuple[dimod.BinaryQuadraticModel, int, int]:
+) -> dimod.BinaryQuadraticModel:
     bqm = create_hamiltonian(dist_matrix, a_coef, b_coef)
 
     num_qubits = len(bqm.variables)
@@ -36,7 +40,16 @@ def create_hamilt(
     print(f"Variables (qubits): {num_qubits} (for N={len(dist_matrix)})")
     print(f"Coupling (interactions): {num_interactions}")
 
-    return bqm, num_qubits, num_interactions
+    return bqm
+
+
+def execute_vqe(
+    bqm: dimod.BinaryQuadraticModel,
+) -> tuple[OptimizeResult, QuantumCircuit, float, Logger]:
+    opt_result, opt_ansatz, final_energy, log = run_vqe(bqm, Logger())
+    print(f"\nMinimum energy reached: {final_energy:.4f}")
+
+    return opt_result, opt_ansatz, final_energy, log
 
 
 if __name__ == "__main__":
@@ -45,4 +58,6 @@ if __name__ == "__main__":
 
     G_mine, dist_matrix, positions = create_graph(N, n_blocks=2)
 
-    bqm, n_qubits, n_interactions = create_hamilt(dist_matrix, a_coef=0.0, b_coef=1.0)
+    bqm = create_problem(dist_matrix, a_coef=0.0, b_coef=1.0)
+
+    opt_result, opt_ansatz, final_energy, log = execute_vqe(bqm)
