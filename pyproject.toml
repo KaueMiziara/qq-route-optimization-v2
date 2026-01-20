@@ -1,6 +1,6 @@
 [project]
 name = "route-optimization"
-version = "0.1.0"
+version = "1.0.0"
 description = "Mining routes optimization for the Quantum Quipu hackaton"
 readme = "README.md"
 authors = [
