@@ -14,7 +14,7 @@ def interpret_solution(
     ansatz: QuantumCircuit,
     opt_params: ndarray,
     qp: QuadraticProgram,
-) -> tuple[list[int], int]:
+) -> list[int]:
     sampler = StatevectorSampler()
 
     measurement_circuit = ansatz.copy()
@@ -42,6 +42,4 @@ def interpret_solution(
     var_map = {v.name: i for i, v in enumerate(qp.variables)}
     n = int(qp.get_num_vars() ** 0.5)
 
-    decoded_route = decode_route(best_bitstring, n, var_map)
-
-    return decoded_route, counts
+    return decode_route(best_bitstring, n, var_map)
